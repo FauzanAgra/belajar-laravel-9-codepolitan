@@ -18,19 +18,22 @@
         </a>
 
         @foreach ($posts as $post)
-            @php
-                $post = explode(',', $post);
-            @endphp
             <div class="card mb-2">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $post[1] }}</h5>
-                    <p class="card-text">{{ $post[2] }}</p>
+                    <h5 class="card-title">{{ $post->title }}</h5>
+                    <p class="card-text">{{ $post->content }}</p>
                     <p class="card-text">
                         <small class="text-body-secondary">Last updated at
-                            {{ date('d M Y H:i', strtotime($post[3])) }}
+                            {{ date('d M Y H:i', strtotime($post->updated_at)) }}
                         </small>
                     </p>
-                    <a href="{{ url("posts/$post[0]") }}" class="btn btn-primary">Selengkapnya</a>
+                    <a href="{{ url("posts/$post->id") }}" class="btn btn-primary">Selengkapnya</a>
+                    <a href="{{ url("posts/$post->id/edit") }}" class="btn btn-warning">Edit</a>
+                    <form method="POST" action="{{ url("posts/$post->id") }}">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class="btn btn-danger mt-3">Hapus</button>
+                    </form>
                 </div>
             </div>
         @endforeach
