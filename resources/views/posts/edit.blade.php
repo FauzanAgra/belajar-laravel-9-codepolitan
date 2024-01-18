@@ -26,12 +26,6 @@
             <button type="submit" class="btn btn-primary">Simpan</button>
             <a class="btn btn-danger" href="{{ url('posts') }}">Kembali</a>
         </form>
-
-        <form method="POST" action="{{ url("posts/$post->id") }}">
-            @method('DELETE')
-            @csrf
-            <button type="submit" class="btn btn-danger mt-3">Hapus</button>
-        </form>
     </div>
 
     <script src="{{ asset('bootstrap-5/js/bootstrap.bundle.min.js') }}"></script>

@@ -19,6 +19,7 @@ class PostController extends Controller
     {
         $posts = DB::table('posts')
             ->select('id', 'title', 'content', 'updated_at')
+            ->where('active', true)
             ->get();
 
         $view_data = [
