@@ -12,6 +12,7 @@
                     <a href="{{ url('logout') }}" class="btn btn-outline-light me-2">Logout</a>
                 @else
                     <a href="{{ url('login') }}" class="btn btn-outline-light me-2">Login</a>
+                    <a href="{{ url('register') }}" class="btn btn-outline-light me-2">Register</a>
                 @endif
             </div>
         </div>

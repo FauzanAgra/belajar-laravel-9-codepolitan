@@ -12,16 +12,16 @@
                     Login
                 </h1>
 
-                <form action="{{ url('login') }}" method="POST" class="form-control">
+                <form action="{{ url('login') }}" method="POST">
                     @csrf
 
                     @if (session()->has('error_message'))
                         <div class="alert alert-danger">
                             {{ session()->get('error_message') }}
                         </div>
-                    @elseif (session()->has('logout_message'))
+                    @elseif (session()->has('message'))
                         <div class="alert alert-success">
-                            {{ session()->get('logout_message') }}
+                            {{ session()->get('message') }}
                         </div>
                     @endif
                     <div class="mb-3">

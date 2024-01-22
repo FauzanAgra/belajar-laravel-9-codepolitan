@@ -13,6 +13,9 @@ Route::get('/', function () {
 Route::get('login', [AuthController::class, 'index']);
 Route::post('login', [AuthController::class, 'authenticate']);
 Route::get('logout', [AuthController::class, 'logout']);
+Route::get('register', [AuthController::class, 'registerForm']);
+Route::post('register', [AuthController::class, 'register']);
+
 
 Route::get('posts', [PostController::class, 'index']);
 Route::get('posts/create', [PostController::class, 'create']);
