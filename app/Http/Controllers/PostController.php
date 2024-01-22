@@ -6,19 +6,11 @@ use App\Mail\BlogPosted;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-
-use function PHPUnit\Framework\returnSelf;
+use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (!Auth::check()) {
@@ -32,11 +24,6 @@ class PostController extends Controller
         return view('posts.index', $view_data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         if (!Auth::check()) {
@@ -45,12 +32,6 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if (!Auth::check()) {
@@ -67,15 +48,11 @@ class PostController extends Controller
 
         Mail::to(Auth::user()->email)->send(new BlogPosted($post));
 
+        $this->notifyTelegram($post);
+
         return redirect('posts');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         if (!Auth::check()) {
@@ -94,12 +71,6 @@ class PostController extends Controller
         return view('posts.show', $view_data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         if (!Auth::check()) {
@@ -114,13 +85,6 @@ class PostController extends Controller
         return view('posts.edit', $view_data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         if (!Auth::check()) {
@@ -138,12 +102,6 @@ class PostController extends Controller
         return redirect("posts/{$id}");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         if (!Auth::check()) {
@@ -152,5 +110,22 @@ class PostController extends Controller
         Post::where('id', $id)->delete();
 
         return redirect("posts");
+    }
+
+    private function notifyTelegram($post)
+    {
+        $apiToken = env('API_TELEGRAM');
+        $chatId = env('CHAT_ID');
+
+        $url = "https://api.telegram.org/bot{$apiToken}/sendMessage";
+        $content = "Ada Postingan Baru nih dengan Judul: <strong>\"{$post->title}\"</strong>";
+
+        $data = [
+            "chat_id" => $chatId,
+            "text" => $content,
+            "parse_mode" => 'HTML'
+        ];
+
+        Http::post($url, $data);
     }
 }
