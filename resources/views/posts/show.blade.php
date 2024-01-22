@@ -18,11 +18,20 @@
             </p>
 
             <p>{{ $post->content }}</p>
+
+            <p class="text-muted mb-2">{{ $totalComments }} Komentar</p>
+
+            @foreach ($comments as $comment)
+                <div class="card  mb-3">
+                    <div class="card-body pl-2 pt-2 pb-1">
+                        <p>{{ $comment->comment }}</p>
+                    </div>
+                </div>
+            @endforeach
+
         </article>
         <a href="{{ url('posts') }}" class="btn btn-primary">Kembali</a>
     </div>
-
-
 
     <script src="{{ asset('bootstrap-5/js/bootstrap.bundle.min.js') }}"></script>
 </body>
